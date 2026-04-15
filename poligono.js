@@ -23,7 +23,7 @@ class Poligono {
     tipo() {
         const nombres = {
             3: "Triangulo",
-            4: "Cuadrado",
+            4: "Cuadrilatero",
             5: "Pentagono",
             6: "Hexagono"
         };

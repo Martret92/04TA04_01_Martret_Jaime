@@ -41,7 +41,7 @@ class Coche {
         console.log(`Frenando y su velocidad es: ${this.velocidad} km/h`);
     }
 
-    //Devolver el sting con la informacion
+    //Devolver el string con la informacion
     estado() {
         const motor = this.encendido ? "Encendido" : "Apagado";
         return `Vehiculo: ${this.marca} ${this.modelo} | Velocidad: ${this.velocidad} km/h | Estado: ${motor}`;
@@ -53,7 +53,9 @@ const miCoche = new Coche("Seat", "Ibiza");
 
 console.log(miCoche.estado());
 miCoche.encender();
+console.log(miCoche.estado());
 miCoche.acelerar(25);
+console.log(miCoche.estado());
 miCoche.frenar(10);
 console.log(miCoche.estado());
 miCoche.apagar();
