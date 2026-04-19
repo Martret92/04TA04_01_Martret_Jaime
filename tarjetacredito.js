@@ -1,62 +1,51 @@
-class tarjeta {
-    constructor(titular, limite){
+class TarjetaCredito {
+    constructor(titular, limite) {
         this.titular = titular;
-        this.saldo = 0; //Deuda actual
+        this.saldo = 0;
         this.limite = limite;
         this.activa = false;
     }
 
-    activar(){
+    activar() {
         this.activa = true;
-        console.log ("Tarjeta activada");
     }
-    desactivar(){
+
+    desactivar() {
         this.activa = false;
-        console.log("Tarjeta desactivada");
     }
-    comprar(cantidad){
-        //Validar si esa activo
-        if(!this.activa){
-            console.warn("Operacion rechazada: La tarjeta no esta activa")
-            return;
-        }
 
-        //Validar si supera el limite
-        if(this.saldo + cantidad > this.limite){
-            console.log("Operacion rechazada: Limite de credito superado");
-            return;
-        }
-        //Si validacion es ok entonce sumamos saldo
+    comprar(cantidad) {
+        if (!this.activa) return "Tarjeta desactivada.";
+        if (this.saldo + cantidad > this.limite) return "Límite superado.";
         this.saldo += cantidad;
-        console.log(`Compra realizada por: ${cantidad} euros. Nuevo saldo: ${this.saldo} euros`);
+        return this.saldo;
     }
-    pagar(cantidad){
-        //Reducir deuda
-        this.saldo -= cantidad;
 
-        //Restricciones para que saldo no pueda ser negativo
-        if (this.saldo < 0){
-            this.saldo = 0;
-        }
-        console.log(`Pago realizado. Deuda actual: ${this.saldo} euros`);
+    pagar(cantidad) {
+        this.saldo = Math.max(0, this.saldo - cantidad);
+        return this.saldo;
     }
-    disponible(){
-        //Credito restante
+
+    disponible() {
         return this.limite - this.saldo;
     }
-    estado(){
-        const situacion = this.activa ? "Activa" : "Inactiva";
-        return `Resumen Tarjeta: Titular: ${this.titular} | Estado: ${situacion} | Saldo: ${this.saldo} euros. | Limite: ${this.limite} euros. | Credito disponible: ${this.disponible()} euros.`;
+
+    estado() {
+        return {
+            titular: this.titular,
+            saldo: this.saldo,
+            disponible: this.disponible(),
+            activa: this.activa,
+        };
     }
 }
 
-//Test
-
-const miTarjeta = new tarjeta("Jaime", 500);
-
-console.log(miTarjeta.estado());
-miTarjeta.activar();
-miTarjeta.comprar(50);
-miTarjeta.comprar(451);
-miTarjeta.pagar(25);
-console.log(miTarjeta.estado());
+// --- Prueba ---
+const tarjeta = new TarjetaCredito("Jaime Martinez", 1000);
+console.log(tarjeta.comprar(200)); // "Tarjeta desactivada."
+tarjeta.activar();
+console.log(tarjeta.comprar(200)); // 200
+console.log(tarjeta.comprar(900)); // "Límite superado."
+console.log(tarjeta.disponible()); // 800
+console.log(tarjeta.pagar(100));   // 100
+console.log(tarjeta.estado());     // { titular: ..., saldo: 100, disponible: 900, activa: true }

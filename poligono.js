@@ -1,47 +1,46 @@
 class Poligono {
     constructor(lados, longitudLado, apotema = null, altura = null) {
-        //Restricciones: Minimi 3 lados y valores positivos
-        if (lados < 3) throw new Error("Un poligono debe tener al menos 3 lados");
-        if (longitudLado <= 0) throw new Error("La longitud debe ser un valor en positivo");
+        if (lados < 3) throw new Error("Mínimo 3 lados.");
+        if (longitudLado <= 0) throw new Error("La longitud del lado debe ser mayor que 0.");
+        if (apotema !== null && apotema <= 0) throw new Error("El apotema debe ser mayor que 0.");
+        if (altura !== null && altura <= 0) throw new Error("La altura debe ser mayor que 0.");
 
         this.lados = lados;
         this.longitudLado = longitudLado;
         this.apotema = apotema;
         this.altura = altura;
     }
-    //Metodo para calcular el perimetro: lados * longitud
+
     perimetro() {
         return this.lados * this.longitudLado;
     }
+
     area() {
-        if (!this.apotema) {
-            return "No se puede calcular el area sin la apotema";
-        }
+        if (!this.apotema) return null;
         return (this.perimetro() * this.apotema) / 2;
     }
-    //Tipo de poligonos segun sus lados
+
     tipo() {
         const nombres = {
-            3: "Triangulo",
-            4: "Cuadrilatero",
-            5: "Pentagono",
-            6: "Hexagono"
+            3: "Triángulo",
+            4: "Cuadrilátero",
+            5: "Pentágono",
+            6: "Hexágono",
+            7: "Heptágono",
+            8: "Octógono",
         };
-        return nombres[this.lados] || "Poligono con varios lados";
-    }
-    //Volumen de un prisma: Area de la base * altura
-    volumen() {
-        const areaBase = this.area();
-        if(!this.area || typeof areaBase === "string"){
-            return "No se puede calcular el volumen (falta altura o apotema).";
-        }
-        return areaBase * this.altura;
+        return nombres[this.lados] ?? `Polígono de ${this.lados} lados`;
     }
 
-    //Resumen: Devuelve un objeto con la información
-    resumen(){
+    volumen() {
+        const area = this.area();
+        if (!area || !this.altura) return null;
+        return area * this.altura;
+    }
+
+    resumen() {
         return {
-            nombre: this.tipo(),
+            tipo: this.tipo(),
             perimetro: this.perimetro(),
             area: this.area(),
             volumen: this.volumen(),
@@ -49,12 +48,14 @@ class Poligono {
     }
 }
 
-//Test
+// --- Prueba ---
+const hexagono = new Poligono(6, 5, 4.33, 10);
+console.log(hexagono.tipo());       // Hexágono
+console.log(hexagono.perimetro());  // 30
+console.log(hexagono.area());       // 64.95
+console.log(hexagono.volumen());    // 649.5
+console.log(hexagono.resumen());    // { tipo, perimetro, area, volumen }
 
-//Ejemplo 1: Cuadrado(4 lados) de 10 cm, apotema de 5cm y altura de 20cm
-const miCubo = new Poligono(4,10,5,20);
-console.log(miCubo.resumen());
-
-//Ejemplo 2: Triangulo(3 lados) de 10cm pero sin apotema ni altura
-const miTriangulo = new Poligono(3,10);
-console.log(miTriangulo.resumen());
+const triangulo = new Poligono(3, 7);
+console.log(triangulo.tipo());      // Triángulo
+console.log(triangulo.area());      // null (sin apotema)
